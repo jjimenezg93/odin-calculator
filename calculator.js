@@ -19,7 +19,7 @@ const multiply = function (a, b) {
 };
 
 const divide = function (a, b) {
-  return a / b;
+  return b === 0 ? 0 : a / b;
 };
 
 const percent = function (a, b) {
