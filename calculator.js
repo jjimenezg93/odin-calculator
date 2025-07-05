@@ -92,9 +92,9 @@ const undo = function () {
   }
 
   if (vals.length == 1 && operator === "") {
-    currentValue = vals[0] = (vals[0] - lastInput) / 10;
+    currentValue = vals[0] = vals[0].slice(0, -1);
   } else if (vals.length == 2) {
-    currentValue = vals[1] = (vals[1] - lastInput) / 10;
+    currentValue = vals[1] = vals[1].slice(0, -1);
   }
   updateDisplay();
 };
