@@ -25,30 +25,23 @@ const percent = function (a, b) {
   return (b * a) / 100;
 };
 
-const addVal = function (val) {
-  lastInput = val;
-  console.log(val);
-
-  if (vals.length == 2) {
-    if (vals[1]) {
-      // TODO: if float -> can add more digits
-    } else {
-      console.error("Already have values, can't set a new one");
-    }
-    return;
-  }
+const addVal = function (newVal) {
+  lastInput = newVal;
+  console.log(newVal);
 
   if (vals.length == 0) {
-    vals[0] = val;
-    currentValue = val;
-    updateDisplay();
+    vals[0] = newVal;
+    currentValue = newVal;
+  } else if (vals.length == 1) {
+    if (operator === "") {
+      currentValue = vals[0] = vals[0] * 10 + newVal;
+    } else {
+      currentValue = vals[1] = newVal;
+    }
+  } else if (vals.length == 2) {
+    currentValue = vals[1] = vals[1] * 10 + newVal;
   }
-
-  if (vals.length == 1 && operator) {
-    vals[1] = val;
-    currentValue = val;
-    updateDisplay();
-  }
+  updateDisplay();
 };
 
 const clearOpData = function () {
@@ -79,11 +72,29 @@ const undo = function () {};
 
 const operate = function () {
   if (vals.length == 2 && operator) {
-    console.log("operate");
-    // TODO: Switch on op
-    currentValue = add(vals[0], vals[1]);
+    switch (operator) {
+      case "+":
+        currentValue = add(...vals);
+        break;
+      case "-":
+        currentValue = subtract(...vals);
+        break;
+      case "*":
+        currentValue = multiply(...vals);
+        break;
+      case "/":
+        currentValue = divide(...vals);
+        break;
+      case "%":
+        currentValue = percent(...vals);
+        break;
+
+      default:
+        break;
+    }
     updateDisplay();
     clearOpData();
+    vals[0] = currentValue;
   }
 };
 
