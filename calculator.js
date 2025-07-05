@@ -129,37 +129,38 @@ const operate = function () {
   }
 };
 
-const configureOpButton = function (btnElem) {
-  let callback;
-
-  let op = btnElem.textContent;
+const getOperatorCallback = function (op) {
   switch (op) {
     case "+":
     case "*":
     case "-":
     case "/":
     case "%":
-      callback = () => setOperator(op);
-      break;
+      return () => setOperator(op);
     case "Del":
-      callback = () => undo();
-      break;
+    case "Delete":
+    case "Backspace":
+      return () => undo();
     case "C":
-      callback = () => clearDataAndDisplay();
-      break;
+      return () => clearDataAndDisplay();
     case ".":
-      callback = () => currentValMakeFloat();
-      break;
+      return () => currentValMakeFloat();
     case "=":
-      callback = () => operate();
-      break;
+    case "Enter":
+      return (callback = () => operate());
 
     default:
-      console.error(`Invalid op: '${op}'`);
-      break;
+      return null;
   }
+};
 
-  btnElem.addEventListener("click", callback);
+const configureOpButton = function (btnElem) {
+  let op = btnElem.textContent;
+  let opCallback = getOperatorCallback(op);
+  if (opCallback == null) {
+    return;
+  }
+  btnElem.addEventListener("click", opCallback);
 };
 
 const configureClickEvents = function () {
@@ -175,6 +176,19 @@ const configureClickEvents = function () {
       return;
     }
     configureOpButton(btnElem);
+  });
+
+  document.addEventListener("keydown", function (event) {
+    let key = event.key;
+    let intVal = parseInt(key);
+    if (!isNaN(intVal)) {
+      addVal(key);
+      return;
+    }
+    let opCallback = getOperatorCallback(key);
+    if (opCallback != null) {
+      opCallback();
+    }
   });
 };
 
