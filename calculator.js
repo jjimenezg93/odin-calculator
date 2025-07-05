@@ -1,7 +1,8 @@
 let vals = [];
 let operator = "";
 let currentValue = 0;
-let lastInput = "";
+let currentValIsFloat = false;
+let lastInputs = [];
 
 let displayInputElem = document.querySelector("#display");
 
@@ -26,8 +27,7 @@ const percent = function (a, b) {
 };
 
 const addVal = function (newVal) {
-  lastInput = newVal;
-  console.log(newVal);
+  lastInputs.push(newVal);
 
   if (vals.length == 0) {
     vals[0] = newVal;
@@ -47,7 +47,7 @@ const addVal = function (newVal) {
 const clearOpData = function () {
   vals = [];
   operator = "";
-  lastInput = "";
+  lastInputs = [];
 };
 
 const clearDataAndDisplay = function () {
@@ -66,9 +66,24 @@ const setOperator = function (op) {
   }
 };
 
-const currentValMakeFloat = function () {};
+const currentValMakeFloat = function () {
+  currentValIsFloat = true;
+};
 
-const undo = function () {};
+const undo = function () {
+  var lastInput = lastInputs.pop();
+
+  if (!lastInput) {
+    return;
+  }
+
+  if (vals.length == 1 && operator === "") {
+    currentValue = vals[0] = (vals[0] - lastInput) / 10;
+  } else if (vals.length == 2) {
+    currentValue = vals[1] = (vals[1] - lastInput) / 10;
+  }
+  updateDisplay();
+};
 
 const operate = function () {
   if (vals.length == 2 && operator) {
