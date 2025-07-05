@@ -34,12 +34,12 @@ const addVal = function (newVal) {
     currentValue = newVal;
   } else if (vals.length == 1) {
     if (operator === "") {
-      currentValue = vals[0] = vals[0] * 10 + newVal;
+      currentValue = vals[0] = vals[0] + newVal;
     } else {
       currentValue = vals[1] = newVal;
     }
   } else if (vals.length == 2) {
-    currentValue = vals[1] = vals[1] * 10 + newVal;
+    currentValue = vals[1] = vals[1] + newVal;
   }
   updateDisplay();
 };
@@ -67,7 +67,21 @@ const setOperator = function (op) {
 };
 
 const currentValMakeFloat = function () {
-  currentValIsFloat = true;
+  if (vals.length == 0) {
+    currentValue = vals[0] = "0.";
+  } else if (vals.length == 1) {
+    if (operator !== "") {
+      currentValue = vals[1] = "0.";
+    } else if (vals[0].indexOf(".") === -1) {
+      currentValue = vals[0] += ".";
+    }
+  } else if (vals.length == 2) {
+    if (vals[1].indexOf(".") !== -1) {
+      return;
+    }
+    currentValue = vals[1] += ".";
+  }
+  updateDisplay();
 };
 
 const undo = function () {
@@ -86,22 +100,24 @@ const undo = function () {
 };
 
 const operate = function () {
+  let a = parseFloat(vals[0]);
+  let b = parseFloat(vals[1]);
   if (vals.length == 2 && operator) {
     switch (operator) {
       case "+":
-        currentValue = add(...vals);
+        currentValue = add(a, b);
         break;
       case "-":
-        currentValue = subtract(...vals);
+        currentValue = subtract(a, b);
         break;
       case "*":
-        currentValue = multiply(...vals);
+        currentValue = multiply(a, b);
         break;
       case "/":
-        currentValue = divide(...vals);
+        currentValue = divide(a, b);
         break;
       case "%":
-        currentValue = percent(...vals);
+        currentValue = percent(a, b);
         break;
 
       default:
@@ -109,7 +125,7 @@ const operate = function () {
     }
     updateDisplay();
     clearOpData();
-    vals[0] = currentValue;
+    vals[0] = currentValue.toString();
   }
 };
 
@@ -150,10 +166,11 @@ const configureClickEvents = function () {
   let buttonsArray = document.querySelectorAll("button");
 
   buttonsArray.forEach((btnElem) => {
-    let intVal = parseInt(btnElem.textContent);
+    let strVal = btnElem.textContent;
+    let intVal = parseInt(strVal);
     if (!isNaN(intVal)) {
       btnElem.addEventListener("click", () => {
-        addVal(intVal);
+        addVal(strVal);
       });
       return;
     }
