@@ -7,5 +7,38 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
     <script src="calculator.js" defer></script>
   </head>
-  <body></body>
+  <body>
+    <div class="center-wrapper">
+      <div id="calc-container">
+        <input type="text" id="display" name="display" value="57.4" readonly>
+        <ul>
+          <li id="seven-btn"><button>7</button></li>
+          <li id="eight-btn"><button>8</button></li>
+          <li id="nine-btn"><button>9</button></li>
+          <li id="add"><button>+</button></li>
+          <li id="mul"><button>*</button></li>
+        </ul>
+        <ul>
+          <li id="four-btn"><button>4</button></li>
+          <li id="five-btn"><button>5</button></li>
+          <li id="six-btn"><button>6</button></li>
+          <li id="sub"><button>-</button></li>
+          <li id="div"><button>/</button></li>
+        </ul>
+        <ul>
+          <li id="one-btn"><button>1</button></li>
+          <li id="two-btn"><button>2</button></li>
+          <li id="three-btn"><button>3</button></li>
+          <li id="clear-btn"><button>C</button></li>
+          <li id="del-btn"><button>Del</button></li>
+        </ul>
+        <ul>
+          <li id="zero"><button>0</button></li>
+          <li id="float-btn"><button>.</button></li>
+          <li id="percent-btn"><button>%</button></li>
+          <li id="result-btn"><button class="double-btn" onclick="operate()">=</button></li>
+        </ul>
+      </div>
+    </div>
+  </body>
 </html>
